@@ -75,7 +75,7 @@ function askQuestion() {
 
 function goPlay() {
     var Country = Object.keys(window.places)[randInt(1, Object.size(window.places))];
-    var CountryVars = window.places[Country];
+    window.CountryVars = window.places[Country];
     delete window.places[Country];
 
     var False1 = Object.keys(window.places)[randInt(1, Object.size(window.places))];
@@ -86,10 +86,10 @@ function goPlay() {
     }
 
     // Below is not working!!
-    /**map.setOptions(getOptions(true,
+    map.setOptions(getOptions(true,
                               CountryVars[0],
                               CountryVars[1],
-                              CountryVars[2]));**/
+                              CountryVars[2]));
 
     askQuestion(Country, False1, False2);
 }
