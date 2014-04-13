@@ -1,3 +1,5 @@
+var map, places, score;
+
 
 function randInt(max, min) {
     return Math.floor((Math.random() * (max - min)) + min);
@@ -47,17 +49,23 @@ function getOptions(navigable, x, y, z) {
         rotateControl:          false,
         scaleControl:           false,
         streetViewControl:      false,
-        minZoom: z, maxZoom: z, zoom: z,
+        //minZoom: z,
+        //maxZoom: z,
+        zoom: z,
         center: new google.maps.LatLng(x, y),
         tilt:                   0
     };
-    console.log("x: " + x + ", y: " + y + ", z: " + z); // too much info?
+    console.log("x: " + x + ", y: " + y + ", z: " + z);
     return mapOptions;
 }
 
 function updateScore(correct){
-    if(correct)
-        window.score++;
+    if(correct) {
+        score++;
+        goPlay()
+    } else {
+        alert('Score: ' + score);
+    }
 }
 
 function askQuestion() {
@@ -74,18 +82,18 @@ function askQuestion() {
 }
 
 function goPlay() {
-    var Country = Object.keys(window.places)[randInt(1, Object.size(window.places))];
-    window.CountryVars = window.places[Country];
-    delete window.places[Country];
+    var Country = Object.keys(places)[randInt(1, Object.size(places))];
+    var CountryVars = places[Country];
+    delete places[Country];
 
-    var False1 = Object.keys(window.places)[randInt(1, Object.size(window.places))];
+    var False1 = Object.keys(places)[randInt(1, Object.size(places))];
     var False2 = False1;
 
     while(False1 == False2){
-        False2 = Object.keys(window.places)[randInt(1, Object.size(window.places))];
+        False2 = Object.keys(places)[randInt(1, Object.size(places))];
     }
 
-    // Below is not working!!
+    
     map.setOptions(getOptions(true,
                               CountryVars[0],
                               CountryVars[1],
@@ -95,21 +103,17 @@ function goPlay() {
 }
 
 function init() {
-    window.score = 0;
+    score = 0;
 
     $.getJSON('../places.json',function(json){
-        window.places = json;           
+        places = json;           
 
-        window.map = new google.maps.Map($('#map')[0],
+        map = new google.maps.Map($('#map')[0],
                                          getOptions(true, 0, 0, 0));
   
         alert("Are you ready?");
-  
-        // TODO: Get timer
-        goPlay()
 
-
-        alert('Score: ' + window.score);
+        goPlay();
     });
 }
 
