@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <title>Google Maps API Test</title>
+    </head>
+    <style type="text/css">    
+        body { background-color: #ffffff; }
+        #map { width:800px; height:600px;
+               left:  50%;   top:    50%;
+               margin: -300px 0 0 -400px;
+               position:        absolute;
+               box-shadow: 0 0 50px #000; }
+    </style>
+    <body>
+        <form>
+            Place Name: <input type="text" name="placename" /><br/>
+            Lattitude:  <input type="text" name="lattitude" /><br/>
+            Longditude: <input type="text" name="longditude"/><br/>
+        </form>
+        <div id="map"/>
+    </body>
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?
+                 key=AIzaSyCrlWVURt85Zg8EY3sgWxaoA7Nqy5PEdsE
+                 &sensor=false">
+    </script>
+    <script src="apitest.js"></script>
+</html>
