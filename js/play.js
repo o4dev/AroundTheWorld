@@ -37,48 +37,60 @@ Object.size = function(obj) {
 
 function getOptions(navigable, x, y, z) {
     var mapOptions = {
-        disableDefaultUI:       !navigable,
-        disableDoubleClickZoom: !navigable,
-        draggable:              navigable,
-        keyboardShortcuts:      navigable,
-        scrollWheel:            navigable,
-        panControl:             navigable,
-        zoomControl:            navigable,
+        //disableDefaultUI:       !navigable,
+        //disableDoubleClickZoom: !navigable,
+        //draggable:              !navigable,
+        //keyboardShortcuts:      !navigable,
+        //scrollWheel:            !navigable,
+        //panControl:             !navigable,
+        //zoomControl:            !navigable,
         mapTypeId:              google.maps.MapTypeId.SATELLITE,
-        overviewMapControl:     false,
-        rotateControl:          false,
-        scaleControl:           false,
-        streetViewControl:      false,
+        //overviewMapControl:     false,
+        //rotateControl:          false,
+        //scaleControl:           false,
+        //streetViewControl:      false,
         //minZoom: z,
-        //maxZoom: z,
-        zoom: z,
+        //maxZoom: z * 10,
+        zoom: z*10000,
         center: new google.maps.LatLng(x, y),
-        tilt:                   0
+        //tilt:                   0
     };
     console.log("x: " + x + ", y: " + y + ", z: " + z);
     return mapOptions;
 }
 
 function updateScore(correct){
+    $('.option').off();
     if(correct) {
         score++;
-        goPlay()
-    } else {
-        alert('Score: ' + score);
+        $('#score').text(score);
     }
+    goPlay();
 }
 
 function askQuestion() {
     var answers = arguments;
+    var correct = arguments[0];
 
     shuffle(answers);
     
-    for(var i=0; i < answers.length; i++)
-        $('#Op' + (i+1)).text(answers[i])
-                        .click(function(){
-                            $('.option').text("");
-                            updateScore(arguments[0] == answers[i]);
-                        });
+    $('#Op1').text(answers[0])
+             .click(function(){
+                $('option').text("")
+                updateScore(correct == answers[0]);
+             })
+
+    $('#Op2').text(answers[1])
+             .click(function(){
+                $('option').text("")
+                updateScore(correct == answers[1]);
+             })
+
+    $('#Op3').text(answers[2])
+             .click(function(){
+                $('option').text("")
+                updateScore(correct == answers[2]);
+             })
 }
 
 function goPlay() {
@@ -99,23 +111,25 @@ function goPlay() {
                               CountryVars[1],
                               CountryVars[2]));
 
+    console.log(Country);
+
     askQuestion(Country, False1, False2);
 }
 
 function init() {
     score = 0;
+    $('#score').text(score);
 
     $.getJSON('../places.json',function(json){
         places = json;           
 
         map = new google.maps.Map($('#map')[0],
                                          getOptions(true, 0, 0, 0));
-  
-        alert("Are you ready?");
 
         goPlay();
+
     });
 }
 
- google.maps.event.addDomListener(window, 'load', init);
+$(document).ready(init);
 
