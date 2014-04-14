@@ -1,4 +1,4 @@
-var map, places, score;
+var map, places, score, answers;
 
 
 function randInt(max, min) {
@@ -61,15 +61,20 @@ function getOptions(navigable, x, y, z) {
 
 function updateScore(correct){
     $('.option').off();
+    console.log('correct: ' + correct);
     if(correct) {
         score++;
         $('#score').text(score);
+        delete places[answers[0]];
+        goPlay();
+    } else {
+        console.log('asking question: ' + answers[0], answers[1], answers[2]);
+        askQuestion(answers[0], answers[1], answers[2]);
     }
-    goPlay();
 }
 
 function askQuestion() {
-    var answers = arguments;
+    answers = arguments;
     var correct = arguments[0];
 
     shuffle(answers);
@@ -96,12 +101,14 @@ function askQuestion() {
 function goPlay() {
     var Country = Object.keys(places)[randInt(1, Object.size(places))];
     var CountryVars = places[Country];
-    delete places[Country];
 
-    var False1 = Object.keys(places)[randInt(1, Object.size(places))];
+    var False1 = Country;
+    while(False1 == Country){
+        False1 = Object.keys(places)[randInt(1, Object.size(places))];
+    }
+
     var False2 = False1;
-
-    while(False1 == False2){
+    while((False1 == False2) || (False2 == Country)){
         False2 = Object.keys(places)[randInt(1, Object.size(places))];
     }
 
@@ -123,8 +130,10 @@ function init() {
     $.getJSON('../places.json',function(json){
         places = json;           
 
+        first = places['Barbados']
+
         map = new google.maps.Map($('#map')[0],
-                                         getOptions(true, 0, 0, 0));
+                                         getOptions(true, first[0], first[1], first[2]));
 
         goPlay();
 
